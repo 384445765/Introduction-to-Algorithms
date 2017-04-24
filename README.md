@@ -4,3 +4,4 @@
 提供书中伪代码的实现
 
 ## 各种排序算法
+-插入排序（InsertSort）,快排（QucikSort）,随机快排（RandomQucikSort）,计数排序（CountSort）
