@@ -30,6 +30,33 @@ void Sort::InsertSort(vector<int> &A){
 }
 
 
+void Sort::MergeSort(vector<int> & A,int p,int r){
+	if(p < r){
+		int q = (p + r)/2;
+		MergeSort(A,p,q);
+		MergeSort(A,q+1,r);
+		Merge(A,p,q,r);
+	}
+}
+void Sort::Merge(vector<int> &A,int p,int q,int r){
+	vector<int> L(&A[p],&A[q+1]);
+	vector<int> R(&A[q+1],&A[r+1]);
+	L.push_back(INT_MAX);
+	R.push_back(INT_MAX);
+
+	int i = 0;
+	int j = 0;
+	for(int k = p;k <= r;k++){
+		if(L[i] <= R[j]){
+			A[k] = L[i];
+			i++;
+		}else{
+			A[k] = R[j];
+			j++;
+		}
+	}
+}
+
 void Sort::QucikSort(vector<int> &A,int q,int r){
 	if(q < r){
 		int x = A[r];//选取主元
@@ -81,3 +108,12 @@ void Sort::CountSort(vector<int> &A,vector<int> &B,int k){
 	}
 }
 
+
+void Sort::BubbleSort(vector<int> & A){
+	for(unsigned int i = 0;i < A.size();i++){
+		for(unsigned int j = A.size() - 1;j > i;j--){
+			if(A[j] < A[j - 1])
+				swap(A[j],A[j - 1]);
+		}
+	}
+}

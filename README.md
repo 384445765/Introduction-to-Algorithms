@@ -1,7 +1,9 @@
-# Introduction to Algorithms(Third Edition)
+#Introduction to Algorithms(Third Edition)
 
-è®°å½•å­¦ä¹ è¯¥ä¹¦çš„è¿‡ç¨‹
-æä¾›ä¹¦ä¸­ä¼ªä»£ç çš„å®ç°
+¼ÇÂ¼Ñ§Ï°¸ÃÊéµÄ¹ı³Ì 
+Ìá¹©ÊéÖĞÎ±´úÂëµÄÊµÏÖ
 
-## å„ç§æ’åºç®—æ³•
--æ’å…¥æ’åºï¼ˆInsertSortï¼‰,å¿«æ’ï¼ˆQucikSortï¼‰,éšæœºå¿«æ’ï¼ˆRandomQucikSortï¼‰,è®¡æ•°æ’åºï¼ˆCountSortï¼‰
+#¸÷ÖÖÅÅĞòËã·¨
+
+²åÈëÅÅĞò£¨InsertSort£©,¹é²¢ÅÅĞò£¨MergeSort£©,¿ìÅÅ£¨QucikSort£©,Ëæ»ú¿ìÅÅ£¨RandomQucikSort£©
+¼ÆÊıÅÅĞò£¨CountSort£©,Ã°ÅİÅÅĞò£¨BubbleSort£©
