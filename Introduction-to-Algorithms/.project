@@ -24,11 +24,4 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>README.md</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/github_program/Introduction-to-Algorithms/README.md</locationURI>
-		</link>
-	</linkedResources>
 </projectDescription>
