@@ -1,10 +1,3 @@
-/*
- * Sort.h
- *
- *  Created on: 2017Äê4ÔÂ24ÈÕ
- *      Author: xiaoquan
- */
-
 #ifndef SORT_H_
 #define SORT_H_
 
@@ -40,7 +33,5 @@ public:
 
 	virtual ~Sort();
 };
-
-
 
 #endif /* SORT_H_ */

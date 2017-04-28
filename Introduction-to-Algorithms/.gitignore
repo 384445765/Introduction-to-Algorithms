@@ -1,5 +1,5 @@
 /Debug/
-/*.settings/
-/.cproject/
-/.project/
-/main.cpp/
+main.cpp
+.project
+.cproject
+*.settings

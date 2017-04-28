@@ -1,10 +1,3 @@
-/*
- * Sort.cpp
- *
- *  Created on: 2017Äê4ÔÂ24ÈÕ
- *      Author: xiaoquan
- */
-
 #include "Sort.h"
 
 
@@ -162,3 +155,6 @@ void Sort::HeapSort(vector<int> &A){
 	}
 	return;
 }
+
+
+
