@@ -1,12 +1,13 @@
 /*
- * RBT.h
+ * OSTreeNode.h
  *
- *  Created on: 2017年5月13日
+ *  Created on: 2017年6月5日
  *      Author: xiaoquan
  */
 
-#ifndef RBT_H_
-#define RBT_H_
+#ifndef OST_H_
+#define OST_H_
+
 #include <iostream>
 #include<stack>
 using namespace std;
@@ -14,74 +15,81 @@ using namespace std;
 static const int RED = 0;
 static const int BLACK = 1;
 
-/*定义红黑树节点*/
+/*定义顺序统计数（红黑树）节点*/
 template <class T>
-struct RBTreeNode{
+struct OSTreeNode{
 public:
     T key;
     int color;
-    RBTreeNode<T>* parents;
-    RBTreeNode<T>* left;
-    RBTreeNode<T>* right;
-	RBTreeNode():key(T()),color(BLACK),parents(NULL),left(NULL),right(NULL){}
+    int size;
+    OSTreeNode<T>* parents;
+    OSTreeNode<T>* left;
+    OSTreeNode<T>* right;
+	OSTreeNode():key(T()),color(BLACK),size(0),parents(NULL),left(NULL),right(NULL){}
 };
 /*定义红黑树类*/
 template <class T>
-class RBT
+class OST
 {
 private:
-    RBTreeNode<T>* root;
-    static  RBTreeNode<T> *NIL;
+    OSTreeNode<T>* root;
+    static  OSTreeNode<T> *NIL;
 public:
-    RBT();
-    void LeftRotate(RBTreeNode<T> *x);
-    void RightRotate(RBTreeNode<T> *x);
+    OST();
+    void LeftRotate(OSTreeNode<T> *x);
+    void RightRotate(OSTreeNode<T> *x);
 
-    void RBInsert(RBTreeNode<T> * z);
-    void RBInsertFixup(RBTreeNode<T> * z);
+    void RBInsert(OSTreeNode<T> * z);
+    void RBInsertFixup(OSTreeNode<T> * z);
     void RBInsertKey(const T& k);
 
-    int RBDelete(RBTreeNode<T> * z);
-    void RBDeleteFixup(RBTreeNode<T> * z);
+    int RBDelete(OSTreeNode<T> * z);
+    void RBDeleteFixup(OSTreeNode<T> * z);
     int RBDeleteKey(const T& k);
 
 	void InorderTreeWalk() const;//中序遍历
 
 	/*给定指向数跟的指针和关键字k,过程TreeSearch返回指向包含关键字k的节点（如果存在的话）
 	 * 指针;否则返回空指针NULL*/
-	RBTreeNode<T> * TreeSearch(const T& k);
+	OSTreeNode<T> * TreeSearch(const T& k);
 
 	//返回红黑二叉树中具有最小关键字的元素节点指针
-	RBTreeNode<T> * TreeMinimun(RBTreeNode<T> * pnode);
+	OSTreeNode<T> * TreeMinimun(OSTreeNode<T> * pnode);
 
 	//返回红黑二叉树中具有最大关键字的元素节点指针
-	RBTreeNode<T> * TreeMaximun(RBTreeNode<T> * pnode);
+	OSTreeNode<T> * TreeMaximun(OSTreeNode<T> * pnode);
 
 	//返回红黑二叉树中当前节点后继节点指针
-	RBTreeNode<T> * TreeSuccessor(RBTreeNode<T> * pnode);
+	OSTreeNode<T> * TreeSuccessor(OSTreeNode<T> * pnode);
 
 	//返回红黑二叉树中当前节点前继节点指针
-	RBTreeNode<T> * TreePredecessor(RBTreeNode<T> * pnode);
+	OSTreeNode<T> * TreePredecessor(OSTreeNode<T> * pnode);
 
-    RBTreeNode<T>* GetRoot() const;
-    void MakeEmpty(RBTreeNode<T>* root);
-    ~RBT();
+    OSTreeNode<T>* GetRoot() const;
+    void MakeEmpty(OSTreeNode<T>* root);
+
+    OSTreeNode<T>* OS_Select(OSTreeNode<T> * x,int i);
+    /*返回以节点x为跟的第i小关键字的节点*/
+
+    int OS_Rank(OSTreeNode<T> *x);
+    /*返回节点x在顺序统计树中的秩（中序遍历对应的线性序中的位置）*/
+
+    ~OST();
 };
-
 
 //定义
 template<class T>
-RBTreeNode<T> *RBT<T>::NIL = new RBTreeNode<T>;
+OSTreeNode<T> *OST<T>::NIL = new OSTreeNode<T>;
 
 
 template<class T>
-RBT<T>::RBT(){
+OST<T>::OST(){
 	root = NULL;
 }
 
 template<class T>
-void RBT<T>::LeftRotate(RBTreeNode<T> *x){
-	RBTreeNode<T> * y = x->right;		//set y
+void OST<T>::LeftRotate(OSTreeNode<T> *x){
+	OSTreeNode<T> * y = x->right;		//set y
 	x->right = y->left;
 	if(y->left != NIL)
 		y->left->parents = x;
@@ -94,12 +102,15 @@ void RBT<T>::LeftRotate(RBTreeNode<T> *x){
 		x->parents->right = y;
 	y->left = x;					//put x on y's left
 	x->parents = y;
+
+	y->size = x->size;				//updata size
+	x->size = x->left->size + x->right->size + 1;
 }
 
 
 template<class T>
-void RBT<T>::RightRotate(RBTreeNode<T> *x){
-	RBTreeNode<T> * y = x->left;		//set y
+void OST<T>::RightRotate(OSTreeNode<T> *x){
+	OSTreeNode<T> * y = x->left;		//set y
 	x->left = y->right;
 	if(y->right != NIL)
 		y->right->parents = x;
@@ -112,16 +123,21 @@ void RBT<T>::RightRotate(RBTreeNode<T> *x){
 		x->parents->right = y;
 	y->right = x;					//put x on y's right
 	x->parents = y;
+
+	y->size = x->size;				//updata size
+	x->size = x->left->size + x->right->size + 1;
 }
 template<class T>
-void RBT<T>::RBInsert(RBTreeNode<T> * z){
+void OST<T>::RBInsert(OSTreeNode<T> * z){
 	if(NULL == root)
 		root = z;
 	else{
-		RBTreeNode<T> * y = NIL;
-		RBTreeNode<T> * x = root;
+		OSTreeNode<T> * y = NIL;
+		OSTreeNode<T> * x = root;
 		while(x != NIL){
 			y = x;
+
+			y->size += 1;
 			if(z->key < x->key)
 				x = x->left;
 			else
@@ -137,10 +153,10 @@ void RBT<T>::RBInsert(RBTreeNode<T> * z){
 }
 
 template<class T>
-void RBT<T>::RBInsertFixup(RBTreeNode<T> * z){
+void OST<T>::RBInsertFixup(OSTreeNode<T> * z){
 	while(z->parents->color == RED){
 		if(z->parents == z->parents->parents->left){
-			RBTreeNode<T> * y = z->parents->parents->right;
+			OSTreeNode<T> * y = z->parents->parents->right;
 			if(y->color == RED){
 				z->parents->color = BLACK;
 				y->color = BLACK;
@@ -156,7 +172,7 @@ void RBT<T>::RBInsertFixup(RBTreeNode<T> * z){
 				RightRotate(z->parents->parents);
 			}
 		}else{
-			RBTreeNode<T> * y = z->parents->parents->left;
+			OSTreeNode<T> * y = z->parents->parents->left;
 			if(y->color == RED){
 				z->parents->color = BLACK;
 				y->color = BLACK;
@@ -177,21 +193,22 @@ void RBT<T>::RBInsertFixup(RBTreeNode<T> * z){
 }
 
 template<class T>
-void RBT<T>::RBInsertKey(const T& k){
-	RBTreeNode<T> *NewNode = new RBTreeNode<T>;
+void OST<T>::RBInsertKey(const T& k){
+	OSTreeNode<T> *NewNode = new OSTreeNode<T>;
 	NewNode->key = k;
 	NewNode->color = RED;
+	NewNode->size = 1;
 	NewNode->left = NIL;
 	NewNode->right = NIL;
 	NewNode->parents = NIL;
 	RBInsert(NewNode);
 }
 template<class T>
-int RBT<T>::RBDelete(RBTreeNode<T> * z){
-    RBTreeNode<T>* pnode = TreeSearch(z->key);
+int OST<T>::RBDelete(OSTreeNode<T> * z){
+    OSTreeNode<T>* pnode = TreeSearch(z->key);
     if(NIL != pnode)
     {
-        RBTreeNode<T>* qnode,*tnode;
+        OSTreeNode<T>* qnode,*tnode;
         if(pnode->left == NIL || pnode->right == NIL)
             qnode = pnode;
         else
@@ -218,9 +235,9 @@ int RBT<T>::RBDelete(RBTreeNode<T> * z){
 }
 
 template<class T>
-void RBT<T>::RBDeleteFixup(RBTreeNode<T> * z){
+void OST<T>::RBDeleteFixup(OSTreeNode<T> * z){
 	while(z != root && z->color == BLACK){
-	        RBTreeNode<T> *w;
+	        OSTreeNode<T> *w;
 	        if(z == z->parents->left){
 	            w = z->parents->right;
 	            if(w->color == RED){
@@ -277,8 +294,8 @@ void RBT<T>::RBDeleteFixup(RBTreeNode<T> * z){
 }
 
 template<class T>
-int RBT<T>::RBDeleteKey(const T& k){
-	RBTreeNode<T> * newNode = new RBTreeNode<T>;
+int OST<T>::RBDeleteKey(const T& k){
+	OSTreeNode<T> * newNode = new OSTreeNode<T>;
 	newNode->key = k;
 	return RBDelete(newNode);
 }
@@ -286,11 +303,11 @@ int RBT<T>::RBDeleteKey(const T& k){
 
 
 template<class T>
-void RBT<T>::InorderTreeWalk() const{
+void OST<T>::InorderTreeWalk() const{
 	   if(NULL != root)
 	    {
-	        stack<RBTreeNode<T>* > s;
-	        RBTreeNode<T> *ptmpnode;
+	        stack<OSTreeNode<T>* > s;
+	        OSTreeNode<T> *ptmpnode;
 	        ptmpnode = root;
 	        while(NIL != ptmpnode || !s.empty())
 	        {
@@ -316,8 +333,8 @@ void RBT<T>::InorderTreeWalk() const{
 
 
 template<class T>
-RBTreeNode<T> * RBT<T>::TreeSearch(const T& k){
-    RBTreeNode<T>* pnode = root;
+OSTreeNode<T> * OST<T>::TreeSearch(const T& k){
+    OSTreeNode<T>* pnode = root;
     while(pnode != NIL)
     {
         if(pnode->key == k)
@@ -333,7 +350,7 @@ RBTreeNode<T> * RBT<T>::TreeSearch(const T& k){
 
 //返回查找二叉树中具有最小关键字的元素节点指针
 template<class T>
-RBTreeNode<T> * RBT<T>::TreeMinimun(RBTreeNode<T> * pnode){
+OSTreeNode<T> * OST<T>::TreeMinimun(OSTreeNode<T> * pnode){
 	if(pnode != NIL)
 		while(pnode->left != NIL)
 			pnode = pnode->left;
@@ -341,7 +358,7 @@ RBTreeNode<T> * RBT<T>::TreeMinimun(RBTreeNode<T> * pnode){
 }
 //返回查找二叉树中具有最大关键字的元素节点指针
 template<class T>
-RBTreeNode<T> * RBT<T>::TreeMaximun(RBTreeNode<T> * pnode){
+OSTreeNode<T> * OST<T>::TreeMaximun(OSTreeNode<T> * pnode){
 	if(pnode != NIL)
 		while(pnode->right != NIL)
 			pnode = pnode->right;
@@ -349,10 +366,10 @@ RBTreeNode<T> * RBT<T>::TreeMaximun(RBTreeNode<T> * pnode){
 }
 
 template<class T>
-RBTreeNode<T> * RBT<T>::TreeSuccessor(RBTreeNode<T> * pnode){
+OSTreeNode<T> * OST<T>::TreeSuccessor(OSTreeNode<T> * pnode){
 	if(pnode->right != NIL)
 		return TreeMinimun(pnode->right);
-	RBTreeNode<T> * p = pnode->parents;
+	OSTreeNode<T> * p = pnode->parents;
 	while(p != NIL && pnode == p->right){
 		pnode = p;
 		p = p->parents;
@@ -361,10 +378,10 @@ RBTreeNode<T> * RBT<T>::TreeSuccessor(RBTreeNode<T> * pnode){
 }
 
 template<class T>
-RBTreeNode<T> * RBT<T>::TreePredecessor(RBTreeNode<T> * pnode){
+OSTreeNode<T> * OST<T>::TreePredecessor(OSTreeNode<T> * pnode){
 	if(pnode->left != NIL)
 		return TreeMaximun(pnode->left);
-	RBTreeNode<T> * p = pnode->parents;
+	OSTreeNode<T> * p = pnode->parents;
 	while(p != NIL && pnode == p->left){
 		pnode = p;
 		p = p->parents;
@@ -373,15 +390,15 @@ RBTreeNode<T> * RBT<T>::TreePredecessor(RBTreeNode<T> * pnode){
 }
 
 template<class T>
-RBTreeNode<T>* RBT<T>::GetRoot() const{
+OSTreeNode<T>* OST<T>::GetRoot() const{
 	return root;
 }
 
 template<class T>
-void RBT<T>::MakeEmpty(RBTreeNode<T>* root){
+void OST<T>::MakeEmpty(OSTreeNode<T>* root){
 	if(NULL != root){
-		RBTreeNode<T>* left = root->left;
-		RBTreeNode<T>* right = root->right;
+		OSTreeNode<T>* left = root->left;
+		OSTreeNode<T>* right = root->right;
 		delete root;
 		if(NIL != left)
 			MakeEmpty(left);
@@ -391,7 +408,32 @@ void RBT<T>::MakeEmpty(RBTreeNode<T>* root){
 }
 
 template<class T>
-RBT<T>::~RBT(){
+OST<T>::~OST(){
 	MakeEmpty(root);
 }
-#endif /* RBT_H_ */
+
+template<class T>
+OSTreeNode<T>* OST<T>::OS_Select(OSTreeNode<T> * x,int i){
+	int r = x->left->size + 1;
+	if(r == i)
+		return x;
+	else if(i < r)
+		return OS_Select(x->left,i);
+	else
+		return OS_Select(x->right,r - i);
+}
+
+template<class T>
+int OST<T>::OS_Rank(OSTreeNode<T> *x){
+	int r = x->left->size + 1;
+	OSTreeNode<T> *y = x;
+	while(y != root){
+		if(y == y->parents->right)
+			r = r + y->parents->left->size + 1;
+		y = y->parents;
+	}
+	return r;
+}
+
+
+#endif /* OST_H_ */
