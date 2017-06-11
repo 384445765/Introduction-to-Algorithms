@@ -15,10 +15,16 @@
   - 前驱（TreePredecessor）和后继（TreeSuccessor），
   - 最大关键字（TreeMaximun）和最小关键字（TreeMinimun）
 
-## 红黑二叉树（RBT）
+## 红黑二叉树（RBT.h）
 
 - 左旋（LeftRotate）,右旋（RightRotate）
 - 插入（RBInsert）,删除(RBDelete)
 
-## 顺序统计树（OST）
+## 顺序统计树（OST.h）
 
+## 动态规划（DP.h）
+
+- 钢条切割
+- 矩阵链乘法
+- 最长公共子列（LCS）
+- 最优二叉搜索树
