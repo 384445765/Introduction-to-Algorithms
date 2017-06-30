@@ -20,7 +20,7 @@
 
 而不必从模板P的第一个字符开始匹配,且偏移不用一次只增加1,当匹配成功的字符串长度等于模板P的长度时，字符串匹配成功一个。 
 
-代码详见[string_match.h](../src/string_match.h)
+代码详见[string_match.h](https://github.com/xuelang-wang/Introduction-to-Algorithms/blob/master/Introduction-to-Algorithms/src/string_match.h)
 
 
 
