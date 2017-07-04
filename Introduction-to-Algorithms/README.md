@@ -36,9 +36,19 @@
 ## 基本的图算法（graph.h）
 - 广度优先搜索
 - 深度优先搜索
+## 数论算法（num_theory.h）
+- 欧几里得算法（+扩展）
+- 求解模线性方程
 ## 字符串匹配(string_match.h)
 - 朴素字符串算法
 - Rabin-Karp算法
 - KMP算法
 ## 最小生成树
 - Prim算法
+## 最短路问题
+### 24单源最短路问题（“SSP.h”）
+- Bellman Ford算法
+- Dijkstra算法
+### 25所有节点对的最短路径问题（“ASP.h”）
+- 最短路径与矩阵乘法
+- Floyd-Warshall算法
