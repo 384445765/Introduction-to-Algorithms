@@ -63,10 +63,10 @@ vector<int> Rabin_Karp_Matcher(string T,string P,int d,int q){
 vector<int> Compute_Prefix_Function(string P){
 	int m = P.length();
 	vector<int> res(m+1,0);
-	int k = 0;
+	int k = 0;//当前匹配字符的个数（不包括自身）
 	for(int q = 2;q <= m;q++){
-		while(k > 0 && P[k] != P[q-1])
-			k = res[k];
+		while(k > 0 && P[k] != P[q-1])//P[k]表示的是第k+1个字符（从头开始计数的）
+			k = res[k];//第k个字符的最大匹配个数
 		if(P[k] == P[q-1])
 			k++;
 		res[q] = k;
