@@ -10,6 +10,7 @@
 
 #include<vector>
 #include<algorithm>
+#include<queue>
 using namespace std;
 /*16章 贪心算法*/
 
@@ -87,7 +88,46 @@ vector<int> findPath(vector<int> v,vector<int> weight,int W,vector<vector<int> >
 
 //赫夫曼编码
 
+typedef struct node{
+	char c;//字符
+	int freq;//出现频率
+	node * left;
+	node * right;
+	node():c(0),freq(0),left(NULL),right(NULL){}
+	node(char ch,int f):c(ch),freq(f),left(NULL),right(NULL){}
 
+}Node;
+
+class mycomparison{
+	bool reverse;
+public:
+	mycomparison(const bool & revparm = false){
+		reverse = revparm;
+	}
+	bool operator()(const Node * lhs,const Node * rhs) const{
+		if(reverse)
+			return lhs->freq > rhs->freq;
+		else
+			return lhs->freq < rhs->freq;
+	}
+};//自定义优先队列对比类
+
+
+Node * HUFFMAN(vector<Node *> &C){
+	int n = C.size();
+	priority_queue<Node *,vector<Node *>,mycomparison> Q(C.begin(),C.end(),mycomparison(true));//最小堆
+
+	for(int i = 0;i < n-1;i++){
+		Node *z = new Node;
+		z->left = Q.top();
+		Q.pop();
+		z->right = Q.top();
+		Q.pop();
+		z->freq = z->left->freq + z->right->freq;
+		Q.push(z);
+	}
+	return Q.top();
+}
 
 
 #endif /* GREEDY_H_ */
