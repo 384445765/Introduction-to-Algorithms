@@ -10,6 +10,9 @@ public:
 	Sort();
 	//≤Â»Î≈≈–Ú
 	void InsertSort(vector<int> &A);
+	//œ£∂˚≈≈–Ú
+	void ShellSort(vector<int> &A);
+
 	//πÈ≤¢≈≈–Ú
 	void MergeSort(vector<int> & A,int p,int r);
 	void Merge(vector<int> &A,int p,int q,int r);

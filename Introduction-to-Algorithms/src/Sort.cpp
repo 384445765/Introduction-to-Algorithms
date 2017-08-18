@@ -22,6 +22,22 @@ void Sort::InsertSort(vector<int> &A){
 	}
 }
 
+//Ï£¶ûÅÅĞò
+void Sort::ShellSort(vector<int> &A){
+	int h,i,j,temp;
+	int n = A.size();
+
+	for(h = n/2;h > 0;h /= 2){//¿ØÖÆÔöÁ¿
+		for(i = h;i < n; i += h){
+			temp = A[i];
+			for(j = i - h;j >= 0 && temp < A[j];j -= h)
+				A[j+h] = A[j];
+			A[j+h] = temp;
+		}
+	}
+}
+
+
 
 void Sort::MergeSort(vector<int> & A,int p,int r){
 	if(p < r){

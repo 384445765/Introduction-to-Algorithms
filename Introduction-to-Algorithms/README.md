@@ -1,6 +1,7 @@
 ## 各种排序算法(Sort.cpp Sort.h)
 
  - 插入排序（InsertSort）
+ - 希尔排序（ShellSort）
  - 归并排序（MergeSort）
  - 快排（QucikSort）
  - 随机快排（RandomQucikSort）  
