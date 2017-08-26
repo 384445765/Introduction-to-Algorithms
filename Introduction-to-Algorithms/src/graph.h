@@ -1,6 +1,8 @@
 /*
  * graph.h
- *
+ *	第22章 基本的图算法
+ *	广度优先搜索
+ *	深度优先搜索
  *  Created on: 2017年6月25日
  *      Author: xiaoquan
  */
@@ -9,6 +11,9 @@
 #define GRAPH_H_
 
 #include<vector>
+#include<queue>
+#include<iostream>
+#include<cmath>
 
 using namespace std;
 
@@ -18,18 +23,20 @@ enum Color{
 	BLACK
 };
 
+const int inf = 0x3fffffff;
+const int NIL = 0;
 struct Node{
 	Color color;
-	int d;//深度优先时是时间
-	int pre;
-	int f;//针对深度优先
+	int d;//(广度优先记录从源节点s到该节点的距离)(深度优先时记录访问时间,用于拓扑排序)
+	int pre;//记录前一节点（前继）
+	int f;//针对深度优先记录介绍时间,用于拓扑排序
 	Node():color(WHITE),d(0),pre(0),f(0){}
 };//定义节点
 
 struct Edge{
-	int u;
-	int v;
-	int w;
+	int u;//起点
+	int v;//终点
+	int w;//权重
 	Edge():u(0),v(0),w(0){}
 	Edge(int start,int end,int weight = 0):u(start),v(end),w(weight){}
 };
@@ -38,20 +45,29 @@ struct Edge{
 
 class Graph{
 private:
-	vector<Node> V;
-	vector<Edge> E;
-	vector<vector<Edge> >Adj;
+	vector<Node> V;//顶点
+	vector<Edge> E;//边
+	vector<vector<Edge> >Adj;//邻接表
 public:
-	int time;//针对深度优先，用来记录时间戳
+	//针对深度优先，用来记录时间戳
+	int time;
 
+	//初始化图
 	Graph(int v_num,int e_num);
 
-	void addEdge(int u,int v,int w = 0);
-	void BFS(int s);
-	void Print_Path(int s,int v);
+	//增加有向边u->v(w)没有权重的默认为1即边数
+	void addEdge(int u,int v,int w = 1);
 
+	//广度优先遍历
+	void BFS(int s);
+
+	//全部节点深度优先遍历
 	void DFS();
+	//单个节点深度优先遍历
 	void DFS_Visit(int u);
+
+	//打印关键路径
+	void Print_Path(int s,int v);
 };
 
 #endif /* GRAPH_H_ */

@@ -5,28 +5,27 @@
  *      Author: xiaoquan
  */
 
-
 #include"graph.h"
-#include<queue>
-#include<iostream>
 
-using namespace std;
-
+//初始化图
 Graph::Graph(int v_num,int e_num){
 	V.resize(v_num);
 	Adj.resize(v_num);
 }
 
+//增加有向边u->v(w)没有权重的默认为1即边数
 void Graph::addEdge(int u,int v,int w){
 	Edge *te = new Edge(u,v,w);
 	E.push_back(*te);
 	Adj[u-1].push_back(*te);
 }
+
+//广度优先遍历
 void Graph::BFS(int s){
 	for(int i = 0;i < V.size();i++){
 		V[i].color = WHITE;
-		V[i].d = 0;
-		V[i].pre = 0;
+		V[i].d = inf;
+		V[i].pre = NIL;
 	}
 	V[s-1].color = GRAY;
 	queue<int> Q;
@@ -38,7 +37,7 @@ void Graph::BFS(int s){
 			int v = Adj[u-1][i].v;
 			if(V[v-1].color == WHITE){
 				V[v-1].color = GRAY;
-				V[v-1].d += 1;
+				V[v-1].d += Adj[u-1][i].w;
 				V[v-1].pre = u;
 				Q.push(v);
 
@@ -49,6 +48,7 @@ void Graph::BFS(int s){
 	}
 }
 
+//打印关键路径
 void Graph::Print_Path(int s,int v){
 	if(v == s)
 		cout << s;
@@ -60,10 +60,11 @@ void Graph::Print_Path(int s,int v){
 	}
 }
 
+//全部节点深度优先遍历
 void Graph::DFS(){
 	for(int i = 0;i < V.size();i++){
 		V[i].color = WHITE;
-		V[i].pre = 0;
+		V[i].pre = NIL;
 	}
 
 	time = 0;
@@ -72,6 +73,8 @@ void Graph::DFS(){
 			DFS_Visit(u);
 	}
 }
+
+//单个节点深度优先遍历
 void Graph::DFS_Visit(int u){
 	time++;
 	V[u-1].d = time;
