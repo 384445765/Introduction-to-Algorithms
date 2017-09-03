@@ -12,6 +12,7 @@
 
 #include<vector>
 #include<queue>
+#include<list>
 #include<iostream>
 #include<cmath>
 
@@ -29,8 +30,10 @@ struct Node{
 	Color color;
 	int d;//(广度优先记录从源节点s到该节点的距离)(深度优先时记录访问时间,用于拓扑排序)
 	int pre;//记录前一节点（前继）
-	int f;//针对深度优先记录介绍时间,用于拓扑排序
-	Node():color(WHITE),d(0),pre(0),f(0){}
+	int f;//针对深度优先记录结束时间,用于拓扑排序
+	int num;//记录节点编号
+	Node():color(WHITE),d(0),pre(0),f(0),num(0){}
+	Node(const Node & t):color(t.color),d(t.d),pre(t.pre),f(t.f),num(t.num){}
 };//定义节点
 
 struct Edge{
@@ -65,6 +68,9 @@ public:
 	void DFS();
 	//单个节点深度优先遍历
 	void DFS_Visit(int u);
+
+	//拓扑排序
+	list<Node> TopologicalSort();
 
 	//打印关键路径
 	void Print_Path(int s,int v);
